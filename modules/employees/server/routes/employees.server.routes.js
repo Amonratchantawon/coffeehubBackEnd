@@ -6,7 +6,7 @@
 var employeesPolicy = require('../policies/employees.server.policy'),
   employees = require('../controllers/employees.server.controller');
 
-module.exports = function(app) {
+module.exports = function (app) {
   // Employees Routes
   app.route('/api/employees').all(employeesPolicy.isAllowed)
     .get(employees.list)
@@ -17,6 +17,8 @@ module.exports = function(app) {
     .put(employees.update)
     .delete(employees.delete);
 
+  app.route('/api/reportemployees').all(employeesPolicy.isAllowed)
+    .get(employees.reademployees, employees.cookingreportemployees, employees.reportemployees);
   // Finish by binding the Employee middleware
   app.param('employeeId', employees.employeeByID);
 };

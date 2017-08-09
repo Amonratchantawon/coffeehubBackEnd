@@ -167,6 +167,156 @@ describe('Employee CRUD tests', function () {
       });
   });
 
+  it('should not be able to save an Employee if no firsname is provided', function (done) {
+    // Invalidate name field
+    employee.firsname = '';
+
+    agent.post('/api/auth/signin')
+      .send(credentials)
+      .expect(200)
+      .end(function (signinErr, signinRes) {
+        // Handle signin error
+        if (signinErr) {
+          return done(signinErr);
+        }
+
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Employee
+        agent.post('/api/employees')
+          .send(employee)
+          .expect(400)
+          .end(function (employeeSaveErr, employeeSaveRes) {
+            // Set message assertion
+            (employeeSaveRes.body.message).should.match('Please fill Employee firsname');
+
+            // Handle Employee save error
+            done(employeeSaveErr);
+          });
+      });
+  });
+
+  it('should not be able to save an Employee if no lastname is provided', function (done) {
+    // Invalidate name field
+    employee.lastname = '';
+
+    agent.post('/api/auth/signin')
+      .send(credentials)
+      .expect(200)
+      .end(function (signinErr, signinRes) {
+        // Handle signin error
+        if (signinErr) {
+          return done(signinErr);
+        }
+
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Employee
+        agent.post('/api/employees')
+          .send(employee)
+          .expect(400)
+          .end(function (employeeSaveErr, employeeSaveRes) {
+            // Set message assertion
+            (employeeSaveRes.body.message).should.match('Please fill Employee lastname');
+
+            // Handle Employee save error
+            done(employeeSaveErr);
+          });
+      });
+  });
+
+  it('should not be able to save an Employee if no jobposition is provided', function (done) {
+    // Invalidate name field
+    employee.jobposition = '';
+
+    agent.post('/api/auth/signin')
+      .send(credentials)
+      .expect(200)
+      .end(function (signinErr, signinRes) {
+        // Handle signin error
+        if (signinErr) {
+          return done(signinErr);
+        }
+
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Employee
+        agent.post('/api/employees')
+          .send(employee)
+          .expect(400)
+          .end(function (employeeSaveErr, employeeSaveRes) {
+            // Set message assertion
+            (employeeSaveRes.body.message).should.match('Please fill Employee jobposition');
+
+            // Handle Employee save error
+            done(employeeSaveErr);
+          });
+      });
+  });
+
+  it('should not be able to save an Employee if no phone is provided', function (done) {
+    // Invalidate name field
+    employee.phone = '';
+
+    agent.post('/api/auth/signin')
+      .send(credentials)
+      .expect(200)
+      .end(function (signinErr, signinRes) {
+        // Handle signin error
+        if (signinErr) {
+          return done(signinErr);
+        }
+
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Employee
+        agent.post('/api/employees')
+          .send(employee)
+          .expect(400)
+          .end(function (employeeSaveErr, employeeSaveRes) {
+            // Set message assertion
+            (employeeSaveRes.body.message).should.match('Please fill Employee phone');
+
+            // Handle Employee save error
+            done(employeeSaveErr);
+          });
+      });
+  });
+
+  it('should not be able to save an Employee if no email is provided', function (done) {
+    // Invalidate name field
+    employee.email = '';
+
+    agent.post('/api/auth/signin')
+      .send(credentials)
+      .expect(200)
+      .end(function (signinErr, signinRes) {
+        // Handle signin error
+        if (signinErr) {
+          return done(signinErr);
+        }
+
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Employee
+        agent.post('/api/employees')
+          .send(employee)
+          .expect(400)
+          .end(function (employeeSaveErr, employeeSaveRes) {
+            // Set message assertion
+            (employeeSaveRes.body.message).should.match('Please fill Employee email');
+
+            // Handle Employee save error
+            done(employeeSaveErr);
+          });
+      });
+  });
+
   it('should be able to update an Employee if signed in', function (done) {
     agent.post('/api/auth/signin')
       .send(credentials)
@@ -425,6 +575,71 @@ describe('Employee CRUD tests', function () {
             });
         });
     });
+  });
+
+
+  it('middleware read employees', function (done) {
+    agent.post('/api/auth/signin')
+      .send(credentials)
+      .expect(200)
+      .end(function (signinErr, signinRes) {
+        // Handle signin error
+        if (signinErr) {
+          return done(signinErr);
+        }
+
+        // Get the userId
+        // var userId = user.id;
+
+        // Save a new Ap
+        agent.post('/api/employees')
+          .send(employee)
+          .expect(200)
+          .end(function (employeeSaveErr, employeeSaveRes) {
+            // Handle Ap save error
+            if (employeeSaveErr) {
+              return done(employeeSaveErr);
+            }
+
+            // Get a list of Aps
+            agent.get('/api/reportemployees')
+              .end(function (employeesGetErr, employeesGetRes) {
+                // Handle Aps save error
+                if (employeesGetErr) {
+                  return done(employeesGetErr);
+                }
+
+                // Get Aps list
+                var employees = employeesGetRes.body;
+
+                // Set assertions
+                // (aps[0].user._id).should.equal(userId);
+                (employees.length).should.match(3);
+
+                // (aps[0].debit[0].docdate).should.match(ap.docdate);
+                // (aps[0].debit[0].docref).should.match(ap.docno);
+                // (aps[0].debit[0].accname).should.match(ap.items[0].productname);
+                // (aps[0].debit[0].amount).should.match(ap.items[0].amount);
+
+                // (aps[0].credit[0].docdate).should.match(ap.docdate);
+                // (aps[0].credit[0].docref).should.match(ap.docno);
+                // (aps[0].credit[0].accname).should.match(ap.contact);
+                // (aps[0].credit[0].amount).should.match(ap.amount);
+
+                
+                // (employees[0].empid).should.match(employee.empid);
+                // (employees[0].firsname).should.match(employee.firsname);
+                // (employees[0].lastname).should.match(employee.lastname);
+                // (employees[0].jobposition).should.match(employee.jobposition);
+                // (employees[0].phone).should.match(employee.phone);
+                // (employees[0].email).should.match(employee.email);
+
+
+                // Call the assertion callback
+                done();
+              });
+          });
+      });
   });
 
   afterEach(function (done) {

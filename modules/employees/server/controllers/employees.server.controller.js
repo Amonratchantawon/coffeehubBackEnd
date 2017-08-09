@@ -12,11 +12,11 @@ var path = require('path'),
 /**
  * Create a Employee
  */
-exports.create = function(req, res) {
+exports.create = function (req, res) {
   var employee = new Employee(req.body);
   employee.user = req.user;
 
-  employee.save(function(err) {
+  employee.save(function (err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -30,7 +30,7 @@ exports.create = function(req, res) {
 /**
  * Show the current Employee
  */
-exports.read = function(req, res) {
+exports.read = function (req, res) {
   // convert mongoose document to JSON
   var employee = req.employee ? req.employee.toJSON() : {};
 
@@ -44,12 +44,12 @@ exports.read = function(req, res) {
 /**
  * Update a Employee
  */
-exports.update = function(req, res) {
+exports.update = function (req, res) {
   var employee = req.employee;
 
   employee = _.extend(employee, req.body);
 
-  employee.save(function(err) {
+  employee.save(function (err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -63,10 +63,10 @@ exports.update = function(req, res) {
 /**
  * Delete an Employee
  */
-exports.delete = function(req, res) {
+exports.delete = function (req, res) {
   var employee = req.employee;
 
-  employee.remove(function(err) {
+  employee.remove(function (err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -80,8 +80,8 @@ exports.delete = function(req, res) {
 /**
  * List of Employees
  */
-exports.list = function(req, res) {
-  Employee.find().sort('-created').populate('user', 'displayName').exec(function(err, employees) {
+exports.list = function (req, res) {
+  Employee.find().sort('-created').populate('user', 'displayName').exec(function (err, employees) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -95,7 +95,7 @@ exports.list = function(req, res) {
 /**
  * Employee middleware
  */
-exports.employeeByID = function(req, res, next, id) {
+exports.employeeByID = function (req, res, next, id) {
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
@@ -114,4 +114,38 @@ exports.employeeByID = function(req, res, next, id) {
     req.employee = employee;
     next();
   });
+};
+
+
+exports.reademployees = function (req, res, next) {
+  // Employee.find().sort('-created').populate('user', 'displayName').exec(function (err, employees) {
+  //   if (err) {
+  //     return res.status(400).send({
+  //       message: errorHandler.getErrorMessage(err)
+  //     });
+  //   } else {
+  //     if (employees.length > 0) {
+  //       req.employees = employees;
+  next();
+  //     } else {
+  //       res.jsonp(employees);
+  //     }
+  //   }
+  // });
+};
+
+exports.cookingreportemployees = function (req, res, next) {
+  // var cookingemployees = req.employees;
+  // var cookingdataemployees;
+  // var data =[];
+
+  // cookingemployees.forEach(function(employee) {
+
+  // }, this);
+
+  next();
+};
+
+exports.reportemployees = function (req, res) {
+  res.jsonp('ddd');
 };

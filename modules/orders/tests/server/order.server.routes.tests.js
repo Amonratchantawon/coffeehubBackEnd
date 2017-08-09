@@ -107,7 +107,7 @@ describe('Order CRUD tests', function () {
             cash: 100,
             netamount: 45,
             shop_id: shop,
-            emp_id:employee
+            emp_id: employee
           };
           done();
         });
@@ -193,6 +193,156 @@ describe('Order CRUD tests', function () {
           .end(function (orderSaveErr, orderSaveRes) {
             // Set message assertion
             (orderSaveRes.body.message).should.match('Please fill Order items');
+
+            // Handle Order save error
+            done(orderSaveErr);
+          });
+      });
+  });
+
+  it('should not be able to save an Order if no date is provided', function (done) {
+    // Invalidate name field
+    order.date = null;
+
+    agent.post('/api/auth/signin')
+      .send(credentials)
+      .expect(200)
+      .end(function (signinErr, signinRes) {
+        // Handle signin error
+        if (signinErr) {
+          return done(signinErr);
+        }
+
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Order
+        agent.post('/api/orders')
+          .send(order)
+          .expect(400)
+          .end(function (orderSaveErr, orderSaveRes) {
+            // Set message assertion
+            (orderSaveRes.body.message).should.match('Please fill Order date');
+
+            // Handle Order save error
+            done(orderSaveErr);
+          });
+      });
+  });
+
+  it('should not be able to save an Order if no receiptNo is provided', function (done) {
+    // Invalidate name field
+    order.receiptNo = '';
+
+    agent.post('/api/auth/signin')
+      .send(credentials)
+      .expect(200)
+      .end(function (signinErr, signinRes) {
+        // Handle signin error
+        if (signinErr) {
+          return done(signinErr);
+        }
+
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Order
+        agent.post('/api/orders')
+          .send(order)
+          .expect(400)
+          .end(function (orderSaveErr, orderSaveRes) {
+            // Set message assertion
+            (orderSaveRes.body.message).should.match('Please fill Order receiptNo');
+
+            // Handle Order save error
+            done(orderSaveErr);
+          });
+      });
+  });
+
+  it('should not be able to save an Order if no change is provided', function (done) {
+    // Invalidate name field
+    order.change = null;
+
+    agent.post('/api/auth/signin')
+      .send(credentials)
+      .expect(200)
+      .end(function (signinErr, signinRes) {
+        // Handle signin error
+        if (signinErr) {
+          return done(signinErr);
+        }
+
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Order
+        agent.post('/api/orders')
+          .send(order)
+          .expect(400)
+          .end(function (orderSaveErr, orderSaveRes) {
+            // Set message assertion
+            (orderSaveRes.body.message).should.match('Please fill Order change');
+
+            // Handle Order save error
+            done(orderSaveErr);
+          });
+      });
+  });
+
+  it('should not be able to save an Order if no cash is provided', function (done) {
+    // Invalidate name field
+    order.cash = null;
+
+    agent.post('/api/auth/signin')
+      .send(credentials)
+      .expect(200)
+      .end(function (signinErr, signinRes) {
+        // Handle signin error
+        if (signinErr) {
+          return done(signinErr);
+        }
+
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Order
+        agent.post('/api/orders')
+          .send(order)
+          .expect(400)
+          .end(function (orderSaveErr, orderSaveRes) {
+            // Set message assertion
+            (orderSaveRes.body.message).should.match('Please fill Order cash');
+
+            // Handle Order save error
+            done(orderSaveErr);
+          });
+      });
+  });
+
+  it('should not be able to save an Order if no netamount is provided', function (done) {
+    // Invalidate name field
+    order.netamount = null;
+
+    agent.post('/api/auth/signin')
+      .send(credentials)
+      .expect(200)
+      .end(function (signinErr, signinRes) {
+        // Handle signin error
+        if (signinErr) {
+          return done(signinErr);
+        }
+
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Order
+        agent.post('/api/orders')
+          .send(order)
+          .expect(400)
+          .end(function (orderSaveErr, orderSaveRes) {
+            // Set message assertion
+            (orderSaveRes.body.message).should.match('Please fill Order netamount');
 
             // Handle Order save error
             done(orderSaveErr);
@@ -472,6 +622,70 @@ describe('Order CRUD tests', function () {
             });
         });
     });
+  });
+
+  it('middleware read orders', function (done) {
+    agent.post('/api/auth/signin')
+      .send(credentials)
+      .expect(200)
+      .end(function (signinErr, signinRes) {
+        // Handle signin error
+        if (signinErr) {
+          return done(signinErr);
+        }
+
+        // Get the userId
+        // var userId = user.id;
+
+        // Save a new Ap
+        agent.post('/api/orders')
+          .send(order)
+          .expect(200)
+          .end(function (orderSaveErr, orderSaveRes) {
+            // Handle Ap save error
+            if (orderSaveErr) {
+              return done(orderSaveErr);
+            }
+
+            // Get a list of Aps
+            agent.get('/api/reportorders')
+              .end(function (ordersGetErr, ordersGetRes) {
+                // Handle Aps save error
+                if (ordersGetErr) {
+                  return done(ordersGetErr);
+                }
+
+                // Get Aps list
+                var orders = ordersGetRes.body;
+
+                // Set assertions
+                // (aps[0].user._id).should.equal(userId);
+                (orders.length).should.match(3);
+
+                // (aps[0].debit[0].docdate).should.match(ap.docdate);
+                // (aps[0].debit[0].docref).should.match(ap.docno);
+                // (aps[0].debit[0].accname).should.match(ap.items[0].productname);
+                // (aps[0].debit[0].amount).should.match(ap.items[0].amount);
+
+                // (aps[0].credit[0].docdate).should.match(ap.docdate);
+                // (aps[0].credit[0].docref).should.match(ap.docno);
+                // (aps[0].credit[0].accname).should.match(ap.contact);
+                // (aps[0].credit[0].amount).should.match(ap.amount);
+
+
+                // (employees[0].empid).should.match(employee.empid);
+                // (employees[0].firsname).should.match(employee.firsname);
+                // (employees[0].lastname).should.match(employee.lastname);
+                // (employees[0].jobposition).should.match(employee.jobposition);
+                // (employees[0].phone).should.match(employee.phone);
+                // (employees[0].email).should.match(employee.email);
+
+
+                // Call the assertion callback
+                done();
+              });
+          });
+      });
   });
 
   afterEach(function (done) {

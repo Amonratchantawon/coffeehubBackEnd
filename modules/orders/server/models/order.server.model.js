@@ -22,40 +22,40 @@ var OrderSchema = new Schema({
 
   date: {
     type: Date,
-    required: 'Please fill Product date',
+    required: 'Please fill Order date',
     trim: true
   },
 
   receiptNo: {
     type: String,
-    required: 'Please fill Product receiptNo',
+    required: 'Please fill Order receiptNo',
     trim: true
   },
 
   change: {
     type: Number,
-    required: 'Please fill Product change',
+    required: 'Please fill Order change',
     trim: true
   },
 
   cash: {
     type: Number,
-    required: 'Please fill Product cash',
+    required: 'Please fill Order cash',
     trim: true
   },
 
   netamount: {
     type: Number,
-    required: 'Please fill Product netamount',
+    required: 'Please fill Order netamount',
     trim: true
   },
   shop_id: {
-    required: 'Please fill Product shop_id',
+    required: 'Please fill Order shop_id',
     type: Schema.ObjectId,
     ref: 'Shop'
   },
   emp_id: {
-    required: 'Please fill Product emp_id',
+    required: 'Please fill Order emp_id',
     type: Schema.ObjectId,
     ref: 'Employee'
   },
