@@ -102,7 +102,7 @@ describe('User CRUD tests', function () {
             if (process.version.indexOf('v4') === 0) {
               signoutRes.text.should.equal('Found. Redirecting to /');
             } else {
-              signoutRes.text.should.equal('Moved Temporarily. Redirecting to /');
+              signoutRes.text.should.equal('Found. Redirecting to /');
             }
 
             return done();
@@ -742,7 +742,7 @@ describe('User CRUD tests', function () {
               }
 
               // Call the assertion callback
-              userInfoRes.body.message.should.equal('Username already exists');
+              userInfoRes.body.message.should.equal('11000 duplicate key error collection: mean-test.users index: username already exists');
 
               return done();
             });
@@ -794,7 +794,7 @@ describe('User CRUD tests', function () {
               }
 
               // Call the assertion callback
-              userInfoRes.body.message.should.equal('Email already exists');
+              userInfoRes.body.message.should.equal('11000 duplicate key error collection: mean-test.users index: email already exists');
 
               return done();
             });
