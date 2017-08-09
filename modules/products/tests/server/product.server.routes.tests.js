@@ -429,6 +429,96 @@ describe('Product CRUD tests', function () {
     });
   });
 
+  it('should not be able to save an Product if no image is provided', function (done) {
+    // Invalidate name field
+    product.image = null;
+    agent.post('/api/auth/signin')
+      .send(credentials)
+      .expect(200)
+      .end(function (signinErr, signinRes) {
+        // Handle signin error
+        if (signinErr) {
+          return done(signinErr);
+        }
+
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Product
+        agent.post('/api/products')
+          .send(product)
+          .expect(400)
+          .end(function (productSaveErr, productSaveRes) {
+            // Set message assertion
+            (productSaveRes.body.message).should.match('Please fill Product image');
+
+            // Handle Product save error
+            done(productSaveErr);
+          });
+      });
+  });
+
+  it('should not be able to save an Product if no price is provided', function (done) {
+    // Invalidate name field
+    product.price = '';
+    agent.post('/api/auth/signin')
+      .send(credentials)
+      .expect(200)
+      .end(function (signinErr, signinRes) {
+        // Handle signin error
+        if (signinErr) {
+          return done(signinErr);
+        }
+
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Product
+        agent.post('/api/products')
+          .send(product)
+          .expect(400)
+          .end(function (productSaveErr, productSaveRes) {
+            // Set message assertion
+            (productSaveRes.body.message).should.match('Please fill Product price');
+
+            // Handle Product save error
+            done(productSaveErr);
+          });
+      });
+  });
+
+  it('should not be able to save an Product if no category is provided', function (done) {
+    // Invalidate name field
+    product.category = null;
+    agent.post('/api/auth/signin')
+      .send(credentials)
+      .expect(200)
+      .end(function (signinErr, signinRes) {
+        // Handle signin error
+        if (signinErr) {
+          return done(signinErr);
+        }
+
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Product
+        agent.post('/api/products')
+          .send(product)
+          .expect(400)
+          .end(function (productSaveErr, productSaveRes) {
+            // Set message assertion
+            (productSaveRes.body.message).should.match('Please fill Product category');
+
+            // Handle Product save error
+            done(productSaveErr);
+          });
+      });
+  });
+
+
+
+
   afterEach(function (done) {
     User.remove().exec(function () {
       Shop_id.remove().exec(function () {
