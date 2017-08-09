@@ -149,7 +149,7 @@ describe('Shop CRUD tests', function () {
           });
       });
   });
-
+ 
   it('should not be able to save an Shop if no address is provided', function (done) {
     // Invalidate name field
     shop.address = [];
@@ -471,6 +471,71 @@ describe('Shop CRUD tests', function () {
         });
     });
   });
+
+  it('middleware read shops', function (done) {
+    agent.post('/api/auth/signin')
+      .send(credentials)
+      .expect(200)
+      .end(function (signinErr, signinRes) {
+        // Handle signin error
+        if (signinErr) {
+          return done(signinErr);
+        }
+
+        // Get the userId
+        // var userId = user.id;
+
+        // Save a new Ap
+        agent.post('/api/shops')
+          .send(shop)
+          .expect(200)
+          .end(function (shopSaveErr, shopSaveRes) {
+            // Handle Ap save error
+            if (shopSaveErr) {
+              return done(shopSaveErr);
+            }
+
+            // Get a list of Aps
+            agent.get('/api/reportshops')
+              .end(function (shopsGetErr, shopsGetRes) {
+                // Handle Aps save error
+                if (shopsGetErr) {
+                  return done(shopsGetErr);
+                }
+
+                // Get Aps list
+                var shops = shopsGetRes.body;
+
+                // Set assertions
+                // (aps[0].user._id).should.equal(userId);
+                (shops.length).should.match(3);
+
+                // (aps[0].debit[0].docdate).should.match(ap.docdate);
+                // (aps[0].debit[0].docref).should.match(ap.docno);
+                // (aps[0].debit[0].accname).should.match(ap.items[0].productname);
+                // (aps[0].debit[0].amount).should.match(ap.items[0].amount);
+
+                // (aps[0].credit[0].docdate).should.match(ap.docdate);
+                // (aps[0].credit[0].docref).should.match(ap.docno);
+                // (aps[0].credit[0].accname).should.match(ap.contact);
+                // (aps[0].credit[0].amount).should.match(ap.amount);
+
+                
+                // (employees[0].empid).should.match(employee.empid);
+                // (employees[0].firsname).should.match(employee.firsname);
+                // (employees[0].lastname).should.match(employee.lastname);
+                // (employees[0].jobposition).should.match(employee.jobposition);
+                // (employees[0].phone).should.match(employee.phone);
+                // (employees[0].email).should.match(employee.email);
+
+
+                // Call the assertion callback
+                done();
+              });
+          });
+      });
+  });
+
 
   afterEach(function (done) {
     User.remove().exec(function () {

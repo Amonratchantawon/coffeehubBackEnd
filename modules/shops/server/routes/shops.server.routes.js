@@ -17,6 +17,9 @@ module.exports = function(app) {
     .put(shops.update)
     .delete(shops.delete);
 
+  app.route('/api/reportshops').all(shopsPolicy.isAllowed)
+    .get(shops.readshops, shops.cookingreportshops, shops.reportshops);
+
   // Finish by binding the Shop middleware
   app.param('shopId', shops.shopByID);
 };

@@ -20,6 +20,9 @@ exports.invokeRolesPolicies = function () {
     }, {
       resources: '/api/shops/:shopId',
       permissions: '*'
+    }, {
+      resources: '/api/reportshops',
+      permissions: '*'
     }]
   }, {
     roles: ['user'],
@@ -28,6 +31,9 @@ exports.invokeRolesPolicies = function () {
       permissions: ['get', 'post']
     }, {
       resources: '/api/shops/:shopId',
+      permissions: ['get']
+    }, {
+      resources: '/api/reportshops',
       permissions: ['get']
     }]
   }, {

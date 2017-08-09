@@ -114,4 +114,37 @@ exports.shopByID = function(req, res, next, id) {
     req.shop = shop;
     next();
   });
+}; 
+
+exports.readshops = function (req, res, next) {
+  // Employee.find().sort('-created').populate('user', 'displayName').exec(function (err, employees) {
+  //   if (err) {
+  //     return res.status(400).send({
+  //       message: errorHandler.getErrorMessage(err)
+  //     });
+  //   } else {
+  //     if (employees.length > 0) {
+  //       req.employees = employees;
+  next();
+  //     } else {
+  //       res.jsonp(employees);
+  //     }
+  //   }
+  // });
+};
+
+exports.cookingreportshops = function (req, res, next) {
+  // var cookingemployees = req.employees;
+  // var cookingdataemployees;
+  // var data =[];
+
+  // cookingemployees.forEach(function(employee) {
+
+  // }, this);
+
+  next();
+};
+
+exports.reportshops = function (req, res) {
+  res.jsonp('ddd');
 };
