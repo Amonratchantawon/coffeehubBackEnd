@@ -32,11 +32,14 @@ describe('Shop Model Unit Tests:', function () {
       shop = new Shop({
         name: 'Shop Name',
         // address: '6/636',
-        shopid: 'A45',
+        shopid: [{
+          phone_number: '0923154235',
+          email: 'coffeehub@hotmail.com'
+        }],
         address: [{
           address: '6/636',
           distict: 'เมยวดี',
-          provice: 'BKK',
+          province: 'BKK',
           postcode: '10220',
         }],
         user: user
@@ -74,7 +77,7 @@ describe('Shop Model Unit Tests:', function () {
     });
 
     it('should be able to show an error when try to save without shopid', function (done) {
-      shop.shopid = '';
+      shop.shopid = [];
 
       return shop.save(function (err) {
         should.exist(err);

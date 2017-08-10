@@ -55,10 +55,13 @@ describe('Shop CRUD tests', function () {
         address: [{
           address: '6/636',
           distict: 'เมยวดี',
-          provice: 'BKK',
+          province: 'BKK',
           postcode: '10220'
         }],
-        shopid: 'A45'
+        shopid: [{
+          phone_number: '0923154235',
+          email: 'coffeehub@hotmail.com'
+        }]
       };
 
       done();
@@ -149,7 +152,7 @@ describe('Shop CRUD tests', function () {
           });
       });
   });
- 
+
   it('should not be able to save an Shop if no address is provided', function (done) {
     // Invalidate name field
     shop.address = [];
@@ -183,7 +186,7 @@ describe('Shop CRUD tests', function () {
 
   it('should not be able to save an Shop if no shopid is provided', function (done) {
     // Invalidate name field
-    shop.shopid = '';
+    shop.shopid = [];
 
     agent.post('/api/auth/signin')
       .send(credentials)
@@ -520,7 +523,7 @@ describe('Shop CRUD tests', function () {
                 // (aps[0].credit[0].accname).should.match(ap.contact);
                 // (aps[0].credit[0].amount).should.match(ap.amount);
 
-                
+
                 // (employees[0].empid).should.match(employee.empid);
                 // (employees[0].firsname).should.match(employee.firsname);
                 // (employees[0].lastname).should.match(employee.lastname);

@@ -15,18 +15,26 @@ var ShopSchema = new Schema({
     required: 'Please fill Shop name',
     trim: true
   },
-  shopid: {
-    type: String,
-    required: 'Please fill Shop shopid',
-    trim: true
-  },
+  // shopid: {
+  //   type: String,
+  //   required: 'Please fill Shop shopid',
+  //   trim: true
+  // },
   address: {
     required: 'Please fill Shop address',
     type: [{
       address: String,
       distict: String,
-      provice: String,
+      province: String,
       postcode: String
+    }]
+  },
+
+  shopid: {
+    required: 'Please fill Shop shopid',
+    type: [{
+      phone_number: String,
+      email: String
     }]
   },
 

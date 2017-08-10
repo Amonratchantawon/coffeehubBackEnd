@@ -45,10 +45,13 @@ describe('Order CRUD tests', function () {
       address: [{
         address: '6/636',
         distict: 'เมยวดี',
-        provice: 'BKK',
+        province: 'BKK',
         postcode: '10220',
       }],
-      shopid: 'A45'
+      shopid: [{
+        phone_number: '0923154235',
+        email: 'coffeehub@hotmail.com'
+      }]
     });
 
     employee = new Employee({
