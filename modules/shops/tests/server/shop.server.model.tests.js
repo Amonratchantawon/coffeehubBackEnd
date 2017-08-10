@@ -32,10 +32,9 @@ describe('Shop Model Unit Tests:', function () {
       shop = new Shop({
         name: 'Shop Name',
         // address: '6/636',
-        shopid: [{
-          phone_number: '0923154235',
-          email: 'coffeehub@hotmail.com'
-        }],
+        phone: '0923154235',
+        email: 'coffeehub@hotmail.com',
+        shopid: '456465FGF',
         address: [{
           address: '6/636',
           distict: 'เมยวดี',
@@ -77,7 +76,24 @@ describe('Shop Model Unit Tests:', function () {
     });
 
     it('should be able to show an error when try to save without shopid', function (done) {
-      shop.shopid = [];
+      shop.shopid = '';
+
+      return shop.save(function (err) {
+        should.exist(err);
+        done();
+      });
+    });
+
+    it('should be able to show an error when try to save without phone', function (done) {
+      shop.phone = '';
+
+      return shop.save(function (err) {
+        should.exist(err);
+        done();
+      });
+    });
+    it('should be able to show an error when try to save without email', function (done) {
+      shop.email = '';
 
       return shop.save(function (err) {
         should.exist(err);
@@ -86,6 +102,8 @@ describe('Shop Model Unit Tests:', function () {
     });
 
   });
+
+
 
   afterEach(function (done) {
     Shop.remove().exec(function () {

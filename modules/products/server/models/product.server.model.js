@@ -37,8 +37,8 @@ var ProductSchema = new Schema({
     required: 'Please fill Product category',
     type: [{
       name: String,
-      datail: String,
-      suncate: String
+      detail: String,
+      subcate: String
     }]
   },
 

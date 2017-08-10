@@ -58,12 +58,10 @@ describe('Shop CRUD tests', function () {
           province: 'BKK',
           postcode: '10220'
         }],
-        shopid: [{
-          phone_number: '0923154235',
-          email: 'coffeehub@hotmail.com'
-        }]
+        phone: '0923154235',
+        email: 'coffeehub@hotmail.com',
+        shopid: '456465FGF'
       };
-
       done();
     });
   });
@@ -186,7 +184,7 @@ describe('Shop CRUD tests', function () {
 
   it('should not be able to save an Shop if no shopid is provided', function (done) {
     // Invalidate name field
-    shop.shopid = [];
+    shop.shopid = '';
 
     agent.post('/api/auth/signin')
       .send(credentials)
@@ -207,6 +205,66 @@ describe('Shop CRUD tests', function () {
           .end(function (shopSaveErr, shopSaveRes) {
             // Set message assertion
             (shopSaveRes.body.message).should.match('Please fill Shop shopid');
+
+            // Handle Shop save error
+            done(shopSaveErr);
+          });
+      });
+  });
+
+  it('should not be able to save an Shop if no email is provided', function (done) {
+    // Invalidate name field
+    shop.email = '';
+
+    agent.post('/api/auth/signin')
+      .send(credentials)
+      .expect(200)
+      .end(function (signinErr, signinRes) {
+        // Handle signin error
+        if (signinErr) {
+          return done(signinErr);
+        }
+
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Shop
+        agent.post('/api/shops')
+          .send(shop)
+          .expect(400)
+          .end(function (shopSaveErr, shopSaveRes) {
+            // Set message assertion
+            (shopSaveRes.body.message).should.match('Please fill Shop email');
+
+            // Handle Shop save error
+            done(shopSaveErr);
+          });
+      });
+  });
+
+  it('should not be able to save an Shop if no phone is provided', function (done) {
+    // Invalidate name field
+    shop.phone = '';
+
+    agent.post('/api/auth/signin')
+      .send(credentials)
+      .expect(200)
+      .end(function (signinErr, signinRes) {
+        // Handle signin error
+        if (signinErr) {
+          return done(signinErr);
+        }
+
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Shop
+        agent.post('/api/shops')
+          .send(shop)
+          .expect(400)
+          .end(function (shopSaveErr, shopSaveRes) {
+            // Set message assertion
+            (shopSaveRes.body.message).should.match('Please fill Shop phone');
 
             // Handle Shop save error
             done(shopSaveErr);

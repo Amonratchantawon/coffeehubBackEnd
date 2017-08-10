@@ -48,10 +48,9 @@ describe('Order CRUD tests', function () {
         province: 'BKK',
         postcode: '10220',
       }],
-      shopid: [{
-        phone_number: '0923154235',
-        email: 'coffeehub@hotmail.com'
-      }]
+      phone: '0923154235',
+      email: 'coffeehub@hotmail.com',
+      shopid: '456465FGF'
     });
 
     employee = new Employee({

@@ -29,13 +29,22 @@ var ShopSchema = new Schema({
       postcode: String
     }]
   },
-
   shopid: {
+    type: String,
     required: 'Please fill Shop shopid',
-    type: [{
-      phone_number: String,
-      email: String
-    }]
+    trim: true
+  },
+
+  phone: {
+    type: String,
+    required: 'Please fill Shop phone',
+    trim: true
+  },
+
+  email: {
+    type: String,
+    required: 'Please fill Shop email',
+    trim: true
   },
 
   created: {
