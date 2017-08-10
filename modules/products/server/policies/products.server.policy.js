@@ -21,7 +21,7 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/products/:productId',
       permissions: '*'
     }, {
-      resources: '/api/reportproducts',
+      resources: '/api/getallproducts',
       permissions: '*'
     }
     ]
@@ -34,7 +34,7 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/products/:productId',
       permissions: ['get']
     }, {
-      resources: '/api/reportproducts',
+      resources: '/api/getallproducts',
       permissions: ['get']
     }
     ]

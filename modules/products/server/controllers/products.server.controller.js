@@ -117,34 +117,51 @@ exports.productByID = function (req, res, next, id) {
 };
 
 exports.readproducts = function (req, res, next) {
-  // Employee.find().sort('-created').populate('user', 'displayName').exec(function (err, employees) {
-  //   if (err) {
-  //     return res.status(400).send({
-  //       message: errorHandler.getErrorMessage(err)
-  //     });
-  //   } else {
-  //     if (employees.length > 0) {
-  //       req.employees = employees;
-  next();
-  //     } else {
-  //       res.jsonp(employees);
-  //     }
-  //   }
-  // });
+  Product.find().sort('-created').populate('user', 'displayName').exec(function (err, products) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      if (products.length > 0) {
+        req.products = products;
+        next();
+      } else {
+        res.jsonp(products);
+      }
+    }
+  });
 };
 
 exports.cookingreportproducts = function (req, res, next) {
-  // var cookingemployees = req.employees;
-  // var cookingdataemployees;
-  // var data =[];
+  var cookingproducts = req.products;
+  var productspush;
+  var data = [];
 
-  // cookingemployees.forEach(function(employee) {
+  cookingproducts.forEach(function (product) {
+    product.category.forEach(function (category) {
+      product.image.forEach(function (image) {
+        productspush.push({
+          
+          category_name: category.name,
+          category_detail: category.detail,
+          subcate: category.subcate,
 
-  // }, this);
+          image_id: image.id,
+          image_url: image.url,
 
+          price: product.price,
+          name: product.name
+        });
+      });
+    });
+
+    data.push(productspush);
+  });
+  req.productcomplete = data;
   next();
 };
 
 exports.reportproducts = function (req, res) {
-  res.jsonp('ddd');
+  res.jsonp(req.productcomplete);
 };
