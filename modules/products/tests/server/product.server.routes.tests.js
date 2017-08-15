@@ -572,7 +572,7 @@ describe('Product CRUD tests', function () {
 
           // Get Aps list
           var products = productsGetRes.body;
-          console.log('rout.test>>>>>>>>>>>>>>>>>>>>>>>>'+product);
+          console.log('rout.test>>>>>>>>>>>>>>>>>>>>>>>>' + product);
           // Set assertions
           (products.length).should.match(2);
 

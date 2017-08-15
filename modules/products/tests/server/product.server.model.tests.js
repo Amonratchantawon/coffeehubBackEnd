@@ -100,14 +100,14 @@ describe('Product Model Unit Tests:', function () {
       });
     });
 
-    // it('should be able to show an error when try to save without shop_id', function (done) {
-    //   product.shop_id = null;
+    it('should be able to show an error when try to save without category', function (done) {
+      product.category = [];
 
-    //   return product.save(function (err) {
-    //     should.exist(err);
-    //     done();
-    //   });
-    // });
+      return product.save(function (err) {
+        should.exist(err);
+        done();
+      });
+    });
 
   });
 
