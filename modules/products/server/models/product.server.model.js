@@ -41,7 +41,6 @@ var ProductSchema = new Schema({
       subcate: String
     }]
   },
-
   created: {
     type: Date,
     default: Date.now

@@ -81,19 +81,27 @@ exports.delete = function (req, res) {
  * List of Products
  */
 exports.list = function (req, res, next) {
-  Product.find().sort('-created').populate('user', 'displayName').populate('shop_id').exec(function (err, products) {
+  var usershop_id = req.user ? req.user.shop_id : '';
+  var filter = '';
+  if (usershop_id && usershop_id !== '') {
+    filter = { shop_id: { _id: usershop_id } };
+  }
+  //console.log('product' + req.products);
+  Product.find(filter).sort('-created').populate('user', 'displayName').populate('shop_id').exec(function (err, products) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      if (products.length > 0) {
-        req.products = products;
-        next();
-        console.log('test Show data' + req.products);
-      } else {
-        //console.log(products);
+      if (products && products.length > 0) {
         res.jsonp(products);
+        // console.log('product' + products);
+        // products.find({ shop_id: _id }).populate('shop_id').exec(function (productss) {
+        //   console.log('testttttttttttttt>>>>>>>>>' + productss);
+        // });
+        //console.log(products.find({ shop_id: id }));
+      } else {
+        res.jsonp([]);
       }
     }
   });
@@ -110,7 +118,7 @@ exports.productByID = function (req, res, next, id) {
     });
   }
 
-  Product.findById(id).populate('user', 'displayName').exec(function (err, product) {
+  Product.findById(id).populate('user', 'displayName').populate('shop_id').exec(function (err, product) {
     if (err) {
       return next(err);
     } else if (!product) {
@@ -142,21 +150,14 @@ exports.productByID = function (req, res, next, id) {
 
 exports.cookingreportproducts = function (req, res, next) {
   var cookingproducts = req.products;
-  console.log('cookingproducts++++++++' + JSON.stringify(cookingproducts));
   var productspush = [];
-
-  console.log('connections.................');
   var data = [];
 
   cookingproducts.forEach(function (product) {
-    console.log('product--------------------------------' + JSON.stringify(product.shop_id));
     product.category.forEach(function (category) {
       product.image.forEach(function (image) {
-        // product.shop_id.forEach(function (shop) {
-        //   shop.address.forEach(function (address) {
-        //     shop.shopid.forEach(function (shopid) {
-        //console.log('shop_id.name>>>>>>>>>>>>>>>>>>>>>>>>>'+product.shop_id);
         productspush.push({
+
           category_name: category.name,
           category_detail: category.detail,
           subcate: category.subcate,
@@ -176,22 +177,8 @@ exports.cookingreportproducts = function (req, res, next) {
           price: product.price,
           name: product.name,
 
-          // shop_name: shop.name,
-
-          // shop_address: address.address,
-          // shop_distict: address.distict,
-          // shop_province: address.province,
-          // shop_postcode: address.postcode,
-
-          // shop_phone: shopid.phone_number,
-          // shop_email: shopid.email
-
         });
-        console.log('productspush----------data>>>>>>>>>>>>' + JSON.stringify(productspush));
-        //     });
-        //   });
-
-        // });
+        // console.log('productspush----------data>>>>>>>>>>>>' + JSON.stringify(productspush));
       });
     });
 
@@ -204,7 +191,31 @@ exports.cookingreportproducts = function (req, res, next) {
 };
 
 exports.reportproducts = function (req, res) {
-  console.log('compls>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>' + JSON.stringify(req.productcomplete));
   res.jsonp(req.productcomplete);
+};
 
+
+
+
+
+
+
+exports.productByShopID = function (req, res, next, shopProductId) {
+
+  Product.find({ shop_id: { _id: shopProductId } }).populate('user', 'displayName').populate('shop_id').exec(function (err, product) {
+    if (err) {
+      return next(err);
+    } else if (!product) {
+      return res.status(404).send({
+        message: 'No Product with that identifier has been found'
+      });
+    }
+    req.shopProducts = product;
+    next();
+  });
+};
+
+exports.productByShopIDResult = function (req, res) {
+  res.jsonp(req.shopProducts);
+  console.log('connect to product..............' + req.shopProducts);
 };

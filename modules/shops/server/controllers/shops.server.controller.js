@@ -6,23 +6,43 @@
 var path = require('path'),
   mongoose = require('mongoose'),
   Shop = mongoose.model('Shop'),
+  User = mongoose.model('User'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   _ = require('lodash');
 
 /**
  * Create a Shop
  */
-exports.create = function(req, res) {
+exports.create = function (req, res) {
   var shop = new Shop(req.body);
   shop.user = req.user;
-
-  shop.save(function(err) {
+  shop.save(function (err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.jsonp(shop);
+      User.findById(req.user._id, function (err, user) {
+        if (user && user._id) {
+          user.shop_id = shop;
+          user.save(function (err) {
+            if (err) {
+              return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+              });
+            } else {
+              // Remove sensitive data before login
+              res.jsonp(shop);
+
+            }
+          });
+        } else {
+          return res.status(400).send({
+            message: errorHandler.getErrorMessage(err)
+          });
+        }
+      });
+
     }
   });
 };
@@ -30,7 +50,7 @@ exports.create = function(req, res) {
 /**
  * Show the current Shop
  */
-exports.read = function(req, res) {
+exports.read = function (req, res) {
   // convert mongoose document to JSON
   var shop = req.shop ? req.shop.toJSON() : {};
 
@@ -44,12 +64,12 @@ exports.read = function(req, res) {
 /**
  * Update a Shop
  */
-exports.update = function(req, res) {
+exports.update = function (req, res) {
   var shop = req.shop;
 
   shop = _.extend(shop, req.body);
 
-  shop.save(function(err) {
+  shop.save(function (err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -63,10 +83,10 @@ exports.update = function(req, res) {
 /**
  * Delete an Shop
  */
-exports.delete = function(req, res) {
+exports.delete = function (req, res) {
   var shop = req.shop;
 
-  shop.remove(function(err) {
+  shop.remove(function (err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -80,8 +100,8 @@ exports.delete = function(req, res) {
 /**
  * List of Shops
  */
-exports.list = function(req, res) {
-  Shop.find().sort('-created').populate('user', 'displayName').exec(function(err, shops) {
+exports.list = function (req, res) {
+  Shop.find().sort('-created').populate('user', 'displayName shop_id').exec(function (err, shops) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -95,7 +115,7 @@ exports.list = function(req, res) {
 /**
  * Shop middleware
  */
-exports.shopByID = function(req, res, next, id) {
+exports.shopByID = function (req, res, next, id) {
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
@@ -114,7 +134,7 @@ exports.shopByID = function(req, res, next, id) {
     req.shop = shop;
     next();
   });
-}; 
+};
 
 exports.readshops = function (req, res, next) {
   // Employee.find().sort('-created').populate('user', 'displayName').exec(function (err, employees) {

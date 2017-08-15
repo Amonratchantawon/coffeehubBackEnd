@@ -40,16 +40,6 @@ describe('Product CRUD tests', function () {
     };
 
     // Create a new user
-    user = new User({
-      firstName: 'Full',
-      lastName: 'Name',
-      displayName: 'Full Name',
-      email: 'test@test.com',
-      username: credentials.username,
-      password: credentials.password,
-      provider: 'local'
-    });
-
     shop = new Shop_id({
       name: 'Shop name',
       address: [{
@@ -60,9 +50,19 @@ describe('Product CRUD tests', function () {
       }],
       phone: '0923154235',
       email: 'coffeehub@hotmail.com',
-      shopid:'456465FGF'
+      shopid: '456465FGF'
     });
 
+    user = new User({
+      firstName: 'Full',
+      lastName: 'Name',
+      displayName: 'Full Name',
+      email: 'test@test.com',
+      username: credentials.username,
+      password: credentials.password,
+      provider: 'local',
+      shop_id: shop
+    });
 
 
     // Save a user to the test db and create new Product
@@ -77,9 +77,8 @@ describe('Product CRUD tests', function () {
             name: 'drink',
             detail: 'xxxxxxxxxxxxxxxxxxxxxxx',
             subcate: 'coffee'
-          }],
+          }]
         };
-
         done();
       });
 
@@ -87,6 +86,21 @@ describe('Product CRUD tests', function () {
   });
 
   it('should be able to save a Product if logged in', function (done) {
+    var newproduct = new Product(product);
+    var newshop = new Shop_id({
+      name: 'Shop nameasdfsadasdf',
+      address: [{
+        address: '6/636adsfsadf',
+        distict: 'เมยsadfsวดี',
+        province: 'BKsadffdsK',
+        postcode: '102asdfadfs20',
+      }],
+      phone: '0923154asdfdf235',
+      email: 'coffeehufdsafsadb@hotmail.com',
+      shopid: '456465dasfsfdFGF'
+    });
+    newproduct.shop_id = newshop;
+    newproduct.save();
     agent.post('/api/auth/signin')
       .send(credentials)
       .expect(200)
@@ -119,10 +133,12 @@ describe('Product CRUD tests', function () {
 
                 // Get Products list
                 var products = productsGetRes.body;
-                console.log('product......>>>>>>>>' + JSON.stringify(products));
+                // console.log('product......>>>>>>>>'+ products);
+                // console.log('product......>>>>>>>>' + JSON.stringify(products));
                 // Set assertions
-                // (products[0].user._id).should.equal(userId);
-                // (products[0].name).should.match('Product name');
+                (products.length).should.equal(1);
+                (products[0].name).should.match('Product name');
+                (products[0].shop_id.name).should.match('Shop name');
 
                 // (products[0].name).should.match(name);
                 // Call the assertion callback
@@ -229,8 +245,8 @@ describe('Product CRUD tests', function () {
       request(app).get('/api/products')
         .end(function (req, res) {
           // Set assertion
-          res.body.should.be.instanceof(Array).and.have.lengthOf(1);
-
+          // res.body.should.equal(0);
+          (res.body.length).should.equal(1);
           // Call the assertion callback
           done();
         });
@@ -520,69 +536,56 @@ describe('Product CRUD tests', function () {
   });
 
 
-  // it('middleware read products', function (done) {
-  //   agent.post('/api/auth/signin')
-  //     .send(credentials)
-  //     .expect(200)
-  //     .end(function (signinErr, signinRes) {
-  //       // Handle signin error
-  //       if (signinErr) {
-  //         return done(signinErr);
-  //       }
+  it('middleware read products By ShopID+++++++', function (done) {
+    var p1 = new Product({
+      name: 'Product name',
+      image: [{ id: 'IMG4', url: 'https://scontent.fbkk6-2.fna.fbcdn.net/v/t31.0-8/19702817_1363515100392787_1785671802800667021_o.jpg?oh=ee80568884d9815ad688556006142320&oe=5A3997D7' }],
+      price: 400,
+      shop_id: shop,
+      category: [{
+        name: 'drink',
+        detail: 'xxxxxxxxxxxxxxxxxxxxxxx',
+        subcate: 'coffee'
+      }]
+    });
 
-  //       // Get the userId
-  //       // var userId = user.id;
+    var p2 = new Product({
+      name: 'Product name2',
+      image: [{ id: 'IMG4', url: 'https://scontent.fbkk6-2.fna.fbcdn.net/v/t31.0-8/19702817_1363515100392787_1785671802800667021_o.jpg?oh=ee80568884d9815ad688556006142320&oe=5A3997D7' }],
+      price: 4002,
+      shop_id: shop,
+      category: [{
+        name: 'drink2',
+        detail: 'xxxxxxxx2xxxxxxxxxxxxxxx',
+        subcate: 'coffee2'
+      }]
+    });
 
-  //       // Save a new Ap
-  //       agent.post('/api/products')
-  //         .send(product)
-  //         .expect(200)
-  //         .end(function (productSaveErr, productSaveRes) {
-  //           // Handle Ap save error
-  //           if (productSaveErr) {
-  //             return done(productSaveErr);
-  //           }
+    p1.save();
+    p2.save(function () {
+      agent.get('/api/getproducts/' + shop._id)
+        .end(function (productsGetErr, productsGetRes) {
+          // Handle Aps save error
+          if (productsGetErr) {
+            return done(productsGetErr);
+          }
 
-  //           // Get a list of Aps
-  //           agent.get('/api/getallproducts')
-  //             .end(function (productsGetErr, productsGetRes) {
-  //               // Handle Aps save error
-  //               if (productsGetErr) {
-  //                 return done(productsGetErr);
-  //               }
+          // Get Aps list
+          var products = productsGetRes.body;
+          console.log('rout.test>>>>>>>>>>>>>>>>>>>>>>>>'+product);
+          // Set assertions
+          (products.length).should.match(2);
 
-  //               // Get Aps list
-  //               var products = productsGetRes.body;
-
-  //               // Set assertions
-  //               // (aps[0].user._id).should.equal(userId);
-  //               (products.length).should.match(1);
-
-  //               // (aps[0].debit[0].docdate).should.match(ap.docdate);
-  //               // (aps[0].debit[0].docref).should.match(ap.docno);
-  //               // (aps[0].debit[0].accname).should.match(ap.items[0].productname);
-  //               // (aps[0].debit[0].amount).should.match(ap.items[0].amount);
-
-  //               // (aps[0].credit[0].docdate).should.match(ap.docdate);
-  //               // (aps[0].credit[0].docref).should.match(ap.docno);
-  //               // (aps[0].credit[0].accname).should.match(ap.contact);
-  //               // (aps[0].credit[0].amount).should.match(ap.amount);
+          // (products[0].name).should.equal(name);
 
 
-  //               (products[0].name).should.equal(name);
-  //               // (employees[0].firsname).should.match(employee.firsname);
-  //               // (employees[0].lastname).should.match(employee.lastname);
-  //               // (employees[0].jobposition).should.match(employee.jobposition);
-  //               // (employees[0].phone).should.match(employee.phone);
-  //               // (employees[0].email).should.match(employee.email);
 
+          // Call the assertion callback
+          done();
+        });
+    });
 
-  //               // Call the assertion callback
-  //               done();
-  //             });
-  //         });
-  //     });
-  // });
+  });
 
   afterEach(function (done) {
     User.remove().exec(function () {

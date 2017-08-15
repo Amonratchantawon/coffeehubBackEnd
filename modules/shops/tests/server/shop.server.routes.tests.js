@@ -103,6 +103,7 @@ describe('Shop CRUD tests', function () {
                 // Set assertions
                 (shops[0].user._id).should.equal(userId);
                 (shops[0].name).should.match('Shop name');
+                (shops[0].user.shop_id).should.equal(shops[0]._id);
 
                 // Call the assertion callback
                 done();
