@@ -17,7 +17,7 @@ module.exports = function (app) {
     .put(products.update)
     .delete(products.delete);
 
-  app.route('/api/getproducts/:shopProductId').all(productsPolicy.isAllowed)
+  app.route('/api/getproducts/:shopProductId')//.all(productsPolicy.isAllowed)
     .get(products.productByShopIDResult);
 
   // app.route('/api/getallproducts').all(productsPolicy.isAllowed)

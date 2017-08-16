@@ -21,7 +21,7 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/promotions/:promotionId',
       permissions: '*'
     }, {
-      resources: '/api/pomotions/:shopPomotionId',
+      resources: '/api/shoppromotions/:shopPromotionId',
       permissions: '*'
     }]
   }, {
@@ -33,7 +33,7 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/promotions/:promotionId',
       permissions: ['get']
     }, {
-      resources: '/api/pomotions/:shopPomotionId',
+      resources: '/api/shoppromotions/:shopPromotionId',
       permissions: ['get']
     }]
   }, {
@@ -45,7 +45,7 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/promotions/:promotionId',
       permissions: ['get']
     }, {
-      resources: '/api/pomotions/:shopPomotionId',
+      resources: '/api/shoppromotions/:shopPromotionId',
       permissions: ['get']
     }]
   }]);

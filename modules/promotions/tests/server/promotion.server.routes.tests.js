@@ -468,7 +468,7 @@ describe('Promotion CRUD tests', function () {
 
     p1.save();
     p2.save(function () {
-      agent.get('/api/pomotions/' + shop._id)
+      agent.get('/api/shoppromotions/' + shop._id)
         .end(function (pomotionsGetErr, pomotionsGetRes) {
           // Handle Aps save error
           if (pomotionsGetErr) {

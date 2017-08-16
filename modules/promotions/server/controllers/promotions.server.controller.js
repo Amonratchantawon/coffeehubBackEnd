@@ -135,7 +135,7 @@ exports.shopPromotionByID = function (req, res, next, shopPomotionId) {
   });
 };
 
-exports.pomotionByShopIDResult = function (req, res) {
+exports.promotionByShopIDResult = function (req, res) {
   res.jsonp(req.shopPromotion);
   // console.log('connect to shopPromotion..............3' + JSON.stringify(req.shopPromotion));
 };
