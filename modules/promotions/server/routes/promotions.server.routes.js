@@ -8,7 +8,7 @@ var promotionsPolicy = require('../policies/promotions.server.policy'),
 
 module.exports = function (app) {
   // Promotions Routes
-  app.route('/api/promotions')//.all(promotionsPolicy.isAllowed)
+  app.route('/api/promotions').all(promotionsPolicy.isAllowed)
     .get(promotions.list)
     .post(promotions.create);
 
@@ -17,7 +17,7 @@ module.exports = function (app) {
     .put(promotions.update)
     .delete(promotions.delete);
 
-  app.route('/api/shoppromotions/:shopPromotionId')//.all(promotionsPolicy.isAllowed)
+  app.route('/api/shoppromotions/:shopPromotionId').all(promotionsPolicy.isAllowed)
     .get(promotions.promotionByShopIDResult);
 
   // Finish by binding the Promotion middleware
